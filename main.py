@@ -10,9 +10,55 @@ import sys
 master = open("settings.txt", "r")
 
 
-def loadSettings():
-    print()
+
+class instrument:
+    def __init__(self, name, yUnit, xUnit, samples):
+        self.name = name
+        self.yUnit = yUnit
+        self.xUnit = xUnit
+        self.samples = samples
+        
+        xVals = []
+        yVals = []
+        
     
+    def factor(self, scale):
+        for item in self.yVals:
+            item = item * scale
+        
+    def addX(self, xVal):
+        self.xVals.append(xVal)
+        
+    def addY(self, yVal):
+        self.yVals.append(yVal)
+        
+
+def processData(data):
+    for item in data:
+        print(item)
+
+
+
+def getData(fileName):
+    dataFile = open(fileName, "r")
+    data = dataFile.readlines()
+    
+    xUnits = []
+    yUnits = []
+    for lineNum, line in enumerate(data):
+        listLine = line.split()
+        if "Y_Unit_Label" in listLine:
+            yUnits.extend(listLine)
+        elif "X_Dimension" in listLine:
+            xUnits.extend(listLine)
+        elif "X_Value" in listLine:
+            processData(data[lineNum:])
+                    
+    print(xUnits)
+        
+       
+    
+
     
 def greeting():
     print("Hello,", os.getlogin(), "where is the data you would like to process?")
@@ -39,27 +85,21 @@ def navigation():
         else:
             prompt = "Y/N would you like to open - " + os.getcwd() + "/" + filesContained[changeTo - 1] + " - "
             openFile = input(prompt)
-            print(openFile)
+            if openFile == "Y" or openFile == "y":
+                getData(os.getcwd() + "/" + filesContained[changeTo - 1])
+            else:
+                navigation()
+            
     else:
         print("failed")
         sys.exit()
      
-        
-    if openFile == "Y" or openFile == "y":
-        getData(os.getcwd() + "/" + filesContained[changeTo - 1])
-    else:
-        navigation()
+ 
     
-        
-    
-    
-        
 
     
     
-def getData(fileName):
-    print("you did idt")
-    sys.exit()
+            
     
 
     
